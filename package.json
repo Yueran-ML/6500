@@ -1,0 +1,23 @@
+{
+  "name": "sharefridge-prototype",
+  "private": true,
+  "version": "2.0.0",
+  "description": "ShareFridge — interactive React prototype for the DECO6500 A2 Task 4 evaluation (Team 9, UQ, Semester 2 2026)",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "^4.3.4",
+    "vite": "^5.4.11"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
