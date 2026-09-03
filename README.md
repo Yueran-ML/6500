@@ -1,95 +1,70 @@
-# ShareFridge — React prototype (v2)
+# ShareFridge
 
-Interactive prototype of **ShareFridge**, a shared-fridge coordination app for university students in shared accommodation. Built for the DECO6500 A2 Task 4 evaluation (Team 9, The University of Queensland, Semester 2 2026). SDG target 12.3 — halving food waste.
+**Who owns what, what's shared, and what needs using soon — one glance at the shared fridge.**
 
-Version 2 replaces the Figma click-through prototype (v1). It is fully interactive: every item opens, every filter works, the Add Food form accepts real input, and urgency labels are computed from real dates.
+ShareFridge is a mobile web app for people who share a fridge in student housing. It replaces the ad-hoc system most households run on — a name on the lid, a message in the group chat, "is this anyone's?" — with one list the whole house can see.
 
-## Live prototype
+**Try it:** https://yueran-ml.github.io/6500/ — demo data only; nothing you enter leaves your browser.
 
-After deploying (see below) the prototype is served at
+<p align="center">
+  <img src="docs/home-framed.png" alt="ShareFridge home screen in a phone frame: the West End House fridge list showing owner, sharing status and urgency for each item" width="380">
+</p>
 
-```
-https://<your-github-username>.github.io/<repo-name>/
-```
+## The problem
 
-## What v2 fixes
+Sharing a fridge produces the same small failures every week. Nobody is sure whether the milk on the door shelf is up for grabs. Something goes off at the back because the person who bought it forgot and nobody else felt entitled to use it. A duplicate gets bought because asking felt awkward. Each failure is minor; together they mean wasted food, wasted money and low-level friction between people who have to live together.
 
-The v1 Figma prototype was verified against TC01–TC10 and an automated walkthrough (SIM-001) on 2–3 September 2026. Every defect found is resolved here:
+Household food waste is a recognised sustainability target (UN SDG 12.3: halve per-capita food waste by 2030). Shared student accommodation is a setting where a small coordination tool can plausibly help, because the fridge is genuinely shared and the people in the house are already coordinating — just badly.
 
-| v1 defect | v2 behaviour |
+## What ShareFridge does
+
+- **One list for the household.** Every item shows its owner, whether it is Shared or Private, how urgently it should be used, and where in the fridge it is.
+- **Ownership and permission are explicit.** Each housemate has a colour, like a sticker on a lid. Private means "mine, please ask"; Shared means "help yourself". Only the owner can edit or remove an item, and the app says so on the item itself.
+- **Urgency you can read at a glance.** Expiry is shown as a food-safety traffic light: red for today or tomorrow, amber for two to three days, green for longer, and a distinct Expired state. The Use Soon filter pulls the red and amber items together.
+- **Adding food takes under a minute.** Name, category, Shared or Private, expiry date, and an optional storage location. Required fields are checked inline, and a confirmation screen shows what was saved and takes you back to the item in the list.
+- **Filters and search.** All / Use Soon / Shared / Mine with live counts, plus search by name, owner or category.
+
+## Screens
+
+| Screen | What it is for |
 | --- | --- |
-| DEF-01 Only Chicken Breast opened a detail view | Every item opens its own detail screen |
-| DEF-02 Back navigation glitched | In-app back on every screen; the device Back button is mapped to it |
-| DEF-03 Filter tabs not wired | All / Use Soon / Shared / Mine work, with live counts |
-| DEF-04 Bottom navigation not interactive | Fridge / Housemates / Settings all work |
-| DEF-05 Post-save confirmation (resolved in v1) | Success screen → View in Fridge, with the new item highlighted |
-| DEF-06 Task-card data did not match the prototype | Free text entry — any task-card item can be added exactly as written |
-| DEF-07 Category showed a blank screen | Native category picker with nine categories |
-| DEF-08 Fields auto-filled as a bundle | Every field is independent; required fields are validated with inline messages |
-| DEF-09 Static expiry labels drifted with the date | Urgency is computed from the real date: Use today · 1 day · 2–3 days (amber) · 4+ days (green) · Expired |
+| My Fridge | The household list sorted by expiry, with filters and search |
+| Food details | Owner, sharing status, expiry, urgency and storage, plus the permission notice; owners can edit or remove |
+| Add / Edit Food | The entry form, with inline validation of required fields |
+| Saved | Confirmation of what was added, with View in Fridge |
+| Housemates | Who is in the house and how many items each has in the fridge |
+| Settings | Household details, and a reset that restores the demo data |
 
-Also new: owners can edit and remove their own items (non-owners see the permission notice), search, and a facilitator reset.
+## Design decisions
 
-## Run locally
+- **Explicit beats implicit.** Sharing status has no default; the form will not save until a choice is made. Making that decision visible is the one thing the app exists to do.
+- **The list is the product.** Most use is a glance before cooking or before shopping, so the home screen carries everything needed to decide — owner, sharing, urgency, location — without opening anything.
+- **Borrow the vernacular of the fridge.** Storage uses real fridge terms (crisper drawer, door, middle shelf). The detail screen carries a best-before stamp the way packaging does (`BB 30 SEP 2026`). Housemate colours echo the sticker-on-the-lid convention.
+- **Keep the burden low.** The cost of the app to a household is data entry, so the form is short, tolerant of typos, and optional fields stay optional.
+
+## Project context
+
+ShareFridge was built by Team 9 for DECO6500 Social & Mobile Computing at The University of Queensland (Semester 2, 2026) as the artefact under evaluation in Assessment 2. The evaluation asks four questions across a layered model: can people read ownership and sharing correctly (interaction); does the prototype hold up in use (prototype); could checking food this way fit into a household routine (in-context use); and does it change how confident people feel about using shared food (human needs).
+
+This repository is **prototype v2**. Version 1 was a Figma click-through. Verifying it before the study — a ten-point check, a heuristic review and an automated walkthrough — found nine defects, two of which would have made a task impossible to complete as written. Rather than script around them, the team rebuilt the prototype as a working web app, so that what participants experience is the design rather than the tooling.
+
+Evaluation sessions use two silent standardised tasks — find an item and judge who may use it and what to use first; add an item from a card and confirm it appears — followed by post-task ratings, the System Usability Scale and a short interview.
+
+## Demo data
+
+The app ships with a fictional household, West End House: you are Kingsley, and your housemates are Alex, Emma and Mia. Four items are seeded and dated relative to the day the app was last reset, so Chicken Breast always reads "Use today". Everything is stored in your browser only. **Settings → Reset demo data** restores the seed and removes anything you added.
+
+## Run it yourself
+
+React 18 and Vite, no backend. Requires Node 18 or newer.
 
 ```bash
 npm install
-npm run dev        # http://localhost:5173
+npm run dev
 ```
 
-```bash
-npm run build      # production build → dist/
-npm run preview    # serve the build locally
-```
+Pushing to `main` builds and publishes the site to GitHub Pages through `.github/workflows/deploy.yml`.
 
-Requires Node 18 or newer.
+---
 
-## Deploy to GitHub Pages
-
-1. Create an empty repository on GitHub (for example `sharefridge-prototype`). Do not add a README or .gitignore there.
-2. In this folder:
-
-   ```bash
-   git init
-   git add .
-   git commit -m "ShareFridge React prototype v2"
-   git branch -M main
-   git remote add origin https://github.com/<your-username>/<repo-name>.git
-   git push -u origin main
-   ```
-
-3. On GitHub open **Settings → Pages** and under *Build and deployment* set **Source** to **GitHub Actions**.
-4. The workflow in `.github/workflows/deploy.yml` builds and publishes the site on every push to `main`. The first run takes about a minute; the URL is shown in the Actions run and under Settings → Pages.
-
-The Vite base path is derived from the repository name automatically (see `vite.config.js`), so the repo can be renamed without editing any file.
-
-## Facilitator notes
-
-- **Reset between participants:** Settings → *Reset demo data*. The four demo items are dated relative to the reset day, so Chicken Breast always reads “Use today”, Milk “2 days left”, Carrots “5 days left”, Greek Yoghurt “7 days left”.
-- **Data stays on the device.** Items are kept in the browser’s localStorage only; nothing is sent anywhere. A different browser or a private window starts from the demo set.
-- **Task card T2 date:** the expiry date printed on the task card must be later than every planned session date, otherwise the saved item will (correctly) show as Expired.
-- **Device:** open the URL on a phone for the most realistic session. On a laptop the app renders inside a 390 × 844 device frame.
-- **Signed-in user** is Kingsley (avatar “K”), household “West End House”. Housemates: Alex, Emma, Mia.
-
-## Project structure
-
-```
-index.html                 page shell, Google Fonts
-vite.config.js             base path derived from the repo name
-src/
-  main.jsx                 React entry
-  App.jsx                  state, in-app routing, persistence
-  data.js                  household, housemates, categories, demo seed
-  lib/date.js              local-date helpers, urgency thresholds, BB stamp
-  lib/storage.js           localStorage wrapper
-  components/              Icon, Tags (urgency / share / owner), FoodCard, ScreenHeader, BottomNav
-  screens/                 Home, Detail, AddFood (add + edit), Success, Housemates, Settings
-  styles.css               tokens and all component styles
-.github/workflows/deploy.yml   build + deploy to GitHub Pages
-```
-
-## Design notes
-
-- Palette: fridge-white ground with a vegetable-green accent. Urgency uses the food-safety traffic light (red / amber / green) as a separate semantic set so it never competes with the accent.
-- Type: Bricolage Grotesque for titles and item names, Figtree for the interface, IBM Plex Mono for the best-before stamp (`BB 10 SEP 2026`) and counts.
-- Each housemate has a fixed colour dot, the way people put a coloured sticker or a name in marker on their food in a real shared fridge.
+Built by Team 9, DECO6500, September 2026. Not connected to any real fridge.
